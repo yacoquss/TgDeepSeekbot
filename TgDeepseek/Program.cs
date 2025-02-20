@@ -54,12 +54,16 @@ async Task OnMessage(Message msg, UpdateType type)
 
 async Task OnUpdate(Update update)
 {
-    if (update is { CallbackQuery: { } query })
+    switch (update)
     {
-        await bot.AnswerCallbackQuery(query.Id,
-            $"You picked {query.Data}");
-        await bot.SendMessage(query.Message!.Chat,
-            $"User {query.From} clicked on {query.Data}");
+        case { Message: { } msg }: await OnMessage(msg,update.Type); break;
+        case { CallbackQuery: { } cbQuery }: await HandleCallbackQuery(cbQuery); break;
+        
     }
+}
+
+async Task HandleCallbackQuery(CallbackQuery callbackQuery)
+{
+    
 }
 
